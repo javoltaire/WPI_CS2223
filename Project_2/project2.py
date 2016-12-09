@@ -2,23 +2,37 @@
 # Project 1 - SeriesWinnerFinder
 # Project Description: Find the probability of a team winning a series based on probability
 import sys
-
 # Some constants
 RECURSIVE_METHOD = 0
 DYNAMIC_METHOD = 1
 
-def dynamicMethod(n, p):
-    return "Probability:" + str(p) + "\tTeams:" + str(n) + " using dynamic method "
+def printMatrix(matrix):
+    for i, element in enumerate(matrix):
+        print(' '.join(str(element)))
+
+def dynamicMethod(i, j, p):
+    matrixHeight = i + 1    # +1 to account for 0 games
+    matrixWidth = j + 1     # +1 to account for 0 games
+    matrix = [[0 for x in range(matrixWidth)] for y in range(matrixHeight)]
+    
+    printMatrix(matrix)
+    return "Probability:" + str(p) + "\tTeams:" + str(j) + " using dynamic method "
         
-def recursiveMethod(n, p):
-    return "Probability:" + str(p) + "\tTeams:" + str(n) + " using recursive method "    
+def recursiveMethod(i, j, p):
+    if(i <= 0 and j > 0):
+        return 1
+    elif(i > 0 and j <= 0):
+        return 0
+    else:
+        q = 1 - p
+        return p*recursiveMethod(i-1, j, p) + q*recursiveMethod(i, j-1, p)
 
 def main():
-    print("This program will help you determine whether you should bet on a team.")
+    print("This program will help you determine whether you should bet on a RedSox or Yankees.")
     # Getting input from the user
-    n = None
-    p = None
-    m = None
+    n = None    # Holds the number of games to win
+    p = None    # Holds the probability of winning each game
+    m = None    # Tells which method to use to solve the probability
     # Request the number of teams
     while(1):
         try:
@@ -30,7 +44,7 @@ def main():
     # Request the probability
     while(1):
         try:
-            p = float(input("Enter the probability of winning a game: "))
+            p = float(input("Enter the probability of RedSox winning a game: "))
             if(p > 1.0):
                 print("The probability must be less than or equal to 1.")
                 continue
@@ -51,12 +65,19 @@ def main():
             
     # Call the right function based on the chosen method
     if(m == RECURSIVE_METHOD):
-        print(recursiveMethod(n, p))
+        print(str(recursiveMethod(n, n, p)))
     else:
-        print(dynamicMethod(n, p))
+        print(dynamicMethod(n, n, p))
             
 
 
 # Configuring to run main as the main method
 if  __name__ =='__main__':
     main()
+    
+    
+    
+    
+    
+
+        
